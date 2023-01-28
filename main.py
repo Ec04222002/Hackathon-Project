@@ -25,9 +25,11 @@ def main():
     root.geometry(win_size)
     center(root)
 
+    ##
     submit_btn = TextButton(root=root, width=100, height=50, text="Submit")
 
-    submit_btn.widget.pack()
+    ##
+    submit_btn.widget.gri
     root.mainloop()
 
 
