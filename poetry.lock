@@ -1,0 +1,24 @@
+[[package]]
+name = "tk"
+version = "0.1.0"
+description = "TensorKit is a deep learning helper between Python and C++."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "xiangcheck"
+version = "0.1.2"
+description = "Validate move correctness for Xiangqi apps"
+category = "main"
+optional = false
+python-versions = "*"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.8"
+content-hash = "153ef4ec8a4d13227043d2b62b5ca73cb2c73d2bfb9ed1b05eedcbba6e97e3d0"
+
+[metadata.files]
+tk = []
+xiangcheck = []
