@@ -170,7 +170,7 @@ def main():
     # order_quantity_color = tk.StringVar(control_frame, "$ Amount")
 
     Order_Quantity = tk.Entry(control_frame, fg="lightgray")
-    Order_Quantity.insert(0, '$ Amount')
+    Order_Quantity.insert(0, 'Amount')
 
     def delText2(event=None):
         Order_Quantity.delete(0, tk.END, )
