@@ -88,6 +88,9 @@ def main():
   
     ticker = tk.Entry(top_frame)
     ticker.insert(0, 'Ticker')
+    def delText0(event=None):
+      ticker.delete(0, tk.END)
+    ticker.bind('<Button>', delText0)
     ticker.grid(row=0,column = 1)
 
     money = tk.Label(top_frame, text = '$')
@@ -95,6 +98,9 @@ def main():
 
     budget = tk.Entry(top_frame)
     budget.insert(0, 'Budget Amount')
+    def delText1(event=None):
+      budget.delete(0, tk.END)
+    budget.bind('<Button>', delText1)
     budget.grid(row=1,column=1)
 
     training = tk.Label(top_frame, text = 'Choose training duration:')
@@ -137,8 +143,17 @@ def main():
     # --------------------------
 #Bottom Frame
     clicked = tk.StringVar()
+    clicked.set('Type')
     Order_Type = tk.OptionMenu(bottom_frame, clicked, 'Buy', 'Sell')
     Order_Type.grid(row=0, column=0)
+    
+    Order_Quantity = tk.Entry(bottom_frame)
+    Order_Quantity.insert(0, 'Amount')
+    def delText2(event=None):
+      Order_Quantity.delete(0, tk.END)
+    Order_Quantity.bind('<Button>', delText2)
+    Order_Quantity.grid(row=0, column=1)
+    
 
 # ##
     root.mainloop()
