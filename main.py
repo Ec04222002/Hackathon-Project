@@ -55,21 +55,19 @@ def add_to_mid_frame(widget):
 def main():
     root = tk.Tk(className=" " + win_name)
 
-    win_frame = tk.Frame(root, relief='sunken')
-    win_frame.pack(fill=tk.BOTH, expand=True)
     root.geometry(win_size)
     root.option_add("*font", font_family)
     center(root)
 
     ##
-    win_frame.columnconfigure(0, weight=1)
-    win_frame.rowconfigure(0, weight=15)
-    win_frame.rowconfigure(1, weight=1)
-    win_frame.rowconfigure(2, weight=2)
+    root.columnconfigure(0, weight=1)
+    root.rowconfigure(0, weight=15)
+    root.rowconfigure(1, weight=1)
+    root.rowconfigure(2, weight=2)
 
-    top_frame = tk.Frame(win_frame)
-    mid_frame = tk.Frame(win_frame)
-    bottom_frame = tk.Frame(win_frame, bg="lightgray")
+    top_frame = tk.Frame(root)
+    mid_frame = tk.Frame(root)
+    bottom_frame = tk.Frame(root, bg="lightgray")
 
     top_frame.grid(row=0, column=0, sticky="NESW")
     mid_frame.grid(row=1, column=0, sticky="NESW")
@@ -89,6 +87,10 @@ def main():
     # creating graphs and start top frame
     ticker = tk.Entry(top_frame)
     ticker.insert(0, 'Ticker')
+
+    def delText0(event=None):
+        ticker.delete(0, tk.END)
+    ticker.bind('<Button>', delText0)
     ticker.grid(row=0, column=1)
 
     money = tk.Label(top_frame, text='$')
@@ -96,6 +98,10 @@ def main():
 
     budget = tk.Entry(top_frame)
     budget.insert(0, 'Budget Amount')
+
+    def delText1(event=None):
+        budget.delete(0, tk.END)
+    budget.bind('<Button>', delText1)
     budget.grid(row=1, column=1)
 
     training = tk.Label(top_frame, text='Choose training duration:')
@@ -133,15 +139,24 @@ def main():
 
     profit_frame.grid(row=0, column=(max_mid_col - 1),
                       sticky="NSWE", rowspan=2)
-
     btn = TextButton(root, text="Plot", width=100, height=30)
-    btn.set_command(lambda: graph.draw(top_frame))
-    btn.widget.pack()
+    btn.set_command(lambda: graph.draw(root))
+    btn.widget.grid(column=0, row=0)
     # --------------------------
 # Bottom Frame
     clicked = tk.StringVar()
+    clicked.set('Type')
     Order_Type = tk.OptionMenu(bottom_frame, clicked, 'Buy', 'Sell')
     Order_Type.grid(row=0, column=0)
+
+    Order_Quantity = tk.Entry(bottom_frame)
+    Order_Quantity.insert(0, 'Amount')
+
+    def delText2(event=None):
+        Order_Quantity.delete(0, tk.END)
+    Order_Quantity.bind('<Button>', delText2)
+    Order_Quantity.grid(row=0, column=1)
+
 
 # ##
     root.mainloop()

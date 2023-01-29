@@ -89,11 +89,11 @@ def draw(root):
     line, = ax.plot([], [], lw=2)
 
     canvas = FigureCanvasTkAgg(fig, master=root)
-
-    canvas.get_tk_widget().pack()
+    canvas.get_tk_widget().grid(column=0, row=0)
     anim = animation.FuncAnimation(
         fig, animate, init_func=init, frames=200, interval=20, blit=True)
     # plt.show()
+    plt.grid()
     canvas.draw()
 
 
