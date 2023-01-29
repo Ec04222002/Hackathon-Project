@@ -1,7 +1,6 @@
 from tkinter import Button
-from constants.button_shape_theme import *
-from constants.font_theme import *
-from constants.color_theme import *
+from constants.button_theme import *
+from constants.label_theme import *
 
 
 class BaseButton:
