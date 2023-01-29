@@ -2,9 +2,9 @@ import tkinter as tk
 from widgets.text_button import TextButton
 from widgets.icon_button import IconButton
 from widgets.custom_label import CustomLabel
-from widgets.ticker_graph import TickerGraph
+# from widgets.ticker_graph import TickerGraph
 from constants.window_theme import *
-
+import widgets.ticker_graph as graph
 from services.stock import *
 
 
@@ -52,10 +52,6 @@ def add_to_mid_frame(widget):
     return
 
 
-def draw_plot():
-    pass
-
-
 def main():
     root = tk.Tk(className=" " + win_name)
 
@@ -91,14 +87,30 @@ def main():
     print(open_prices_data)
     # print(open_prices_data)
     # creating graphs and start top frame
-    graph = TickerGraph(x_axis_name="Time (HH:MM)", y_axis_name="Open Price ($)",
-                        x_time_data=times_data, y_open_price_data=open_prices_data)
-    #
-    graph.make_graph()
-
     ticker = tk.Entry(top_frame)
-    ticker.insert(0, "Hello")
-    ticker.grid(row=0, column=0)
+    ticker.insert(0, 'Ticker')
+    ticker.grid(row=0, column=1)
+
+    money = tk.Label(top_frame, text='$')
+    money.grid(row=1, column=0)
+
+    budget = tk.Entry(top_frame)
+    budget.insert(0, 'Budget Amount')
+    budget.grid(row=1, column=1)
+
+    training = tk.Label(top_frame, text='Choose training duration:')
+    training.grid(row=2, column=1)
+
+    time = tk.IntVar()
+    Option1 = tk.Radiobutton(top_frame, text='5 min', variable=time, value=5)
+    Option1.grid(row=3, column=1)
+    Option2 = tk.Radiobutton(top_frame, text='10 min', variable=time, value=10)
+    Option2.grid(row=4, column=1)
+    Option3 = tk.Radiobutton(top_frame, text='15 min', variable=time, value=15)
+    Option3.grid(row=5, column=1)
+
+    Start = tk.Button(top_frame, text='START')
+    Start.grid(row=6, column=1)
     # creating specs middle frame
 
     specs = ["Open", "Close", "High", "Low", "Volume", "Market Cap", "52 Week High",
@@ -123,11 +135,13 @@ def main():
                       sticky="NSWE", rowspan=2)
 
     btn = TextButton(root, text="Plot", width=100, height=30)
-
-    btn.set_command(graph.animate)
+    btn.set_command(lambda: graph.draw(top_frame))
     btn.widget.pack()
     # --------------------------
-
+# Bottom Frame
+    clicked = tk.StringVar()
+    Order_Type = tk.OptionMenu(bottom_frame, clicked, 'Buy', 'Sell')
+    Order_Type.grid(row=0, column=0)
 
 # ##
     root.mainloop()
