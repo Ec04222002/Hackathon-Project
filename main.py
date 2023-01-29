@@ -53,6 +53,8 @@ def add_to_mid_frame(widget):
 
 
 def main():
+
+    global top_frame
     root = tk.Tk(className=" " + win_name)
 
     root.geometry(win_size)
@@ -61,8 +63,8 @@ def main():
 
     ##
     root.columnconfigure(0, weight=1)
-    root.rowconfigure(0, weight=15)
-    root.rowconfigure(1, weight=1)
+    root.rowconfigure(0, weight=7)
+    root.rowconfigure(1, weight=2)
     root.rowconfigure(2, weight=2)
 
     top_frame = tk.Frame(root)
@@ -73,93 +75,134 @@ def main():
     mid_frame.grid(row=1, column=0, sticky="NESW")
     bottom_frame.grid(row=2, column=0, sticky="NESW")
 
+    top_frame.columnconfigure(0, weight=4)
+    top_frame.columnconfigure(1, weight=1)
     for i in range(max_mid_row):
         mid_frame.rowconfigure(i, weight=row_weight)
     for j in range(max_mid_col):
         mid_frame.columnconfigure(j, weight=col_weight)
+    for k in range(4):
+        top_frame.rowconfigure(k, weight=1)
 
-    stock_name = "AMZN"
-    stock_res = get_stock(stock_name)
-    times_data, prices_data = get_time_price(stock_res)
-    open_prices_data = [price['open'] for price in prices_data]
-    print(open_prices_data)
+    for l in range(3):
+        bottom_frame.columnconfigure(i, weight=1)
+        bottom_frame.rowconfigure(i, weight=1)
+
     # print(open_prices_data)
     # creating graphs and start top frame
-    ticker = tk.Entry(top_frame)
+    ticker = tk.Entry(top_frame, fg="lightgray")
     ticker.insert(0, 'Ticker')
 
     def delText0(event=None):
         ticker.delete(0, tk.END)
     ticker.bind('<Button>', delText0)
-    ticker.grid(row=0, column=1)
+    ticker.grid(row=0, column=1, rowspan=3, sticky="W", padx=7)
 
-    money = tk.Label(top_frame, text='$')
-    money.grid(row=1, column=0)
-
-    budget = tk.Entry(top_frame)
-    budget.insert(0, 'Budget Amount')
+    budget = tk.Entry(top_frame, fg="lightgray")
+    budget.insert(0, '$ Budget Amount')
 
     def delText1(event=None):
         budget.delete(0, tk.END)
     budget.bind('<Button>', delText1)
-    budget.grid(row=1, column=1)
+    budget.grid(row=1, column=1, rowspan=2, sticky="W", padx=7)
 
-    training = tk.Label(top_frame, text='Choose training duration:')
-    training.grid(row=2, column=1)
+    options_frame = tk.Frame(top_frame)
+    options_frame.columnconfigure(0, weight=1)
+    options_frame.columnconfigure(1, weight=1)
+    options_frame.columnconfigure(2, weight=1)
+    options_frame.columnconfigure(3, weight=1)
+    options_frame.rowconfigure(0, weight=1)
 
+    training = tk.Label(options_frame, text='Duration:')
+    training.grid(row=0, column=0)
     time = tk.IntVar()
-    Option1 = tk.Radiobutton(top_frame, text='5 min', variable=time, value=5)
-    Option1.grid(row=3, column=1)
-    Option2 = tk.Radiobutton(top_frame, text='10 min', variable=time, value=10)
-    Option2.grid(row=4, column=1)
-    Option3 = tk.Radiobutton(top_frame, text='15 min', variable=time, value=15)
-    Option3.grid(row=5, column=1)
+    Option1 = tk.Radiobutton(options_frame, text='5m', variable=time, value=5)
+    Option1.grid(row=0, column=1)
+    Option2 = tk.Radiobutton(options_frame, text='10m',
+                             variable=time, value=10)
+    Option2.grid(row=0, column=2)
+    Option3 = tk.Radiobutton(options_frame, text='15m',
+                             variable=time, value=15)
+    Option3.grid(row=0, column=3)
 
-    Start = tk.Button(top_frame, text='START')
-    Start.grid(row=6, column=1)
+    options_frame.grid(column=1, row=2, sticky="W", padx=5)
+
+    start_reset_frame = tk.Frame(top_frame)
+    start_reset_frame.columnconfigure(0, weight=1)
+    start_reset_frame.columnconfigure(1, weight=1)
+    Start = TextButton(root=start_reset_frame,
+                       text="Run ➤", width=110, height=50)
+    reset = TextButton(root=start_reset_frame,
+                       text="Reset ⟳", width=110, height=50)
+
+    Start.set_command(lambda: handle_run(ticker.get()))
+    reset.set_command(handle_reset)
+    Start.widget.grid(row=0, column=0, padx=7)
+    reset.widget.grid(row=0, column=1, padx=7)
+    start_reset_frame.grid(column=1, row=3, sticky="NW")
+
     # creating specs middle frame
 
     specs = ["Open", "Close", "High", "Low", "Volume", "Market Cap", "52 Week High",
              "52 Week Low", "Dividend Yield", "P/E Ratio", "P/B Ratio", "PEG Ratio"]
 
     profits = ["Cash Available", "Total Gain"]
-    profit_frame = tk.Frame(
-        mid_frame, highlightbackground="lightgray", highlightthickness=2, )
-    profit_frame.columnconfigure(0, weight=1)
-    profit_frame.rowconfigure(0, weight=1)
-    profit_frame.rowconfigure(1, weight=1)
+
     for spec in specs:
         label = CustomLabel(mid_frame, text=spec + ":")
         add_to_mid_frame(label.widget)
+    for profit in profits:
+        label = CustomLabel(mid_frame, text=profit + ": $")
+        add_to_mid_frame(label.widget)
 
-    cash_avail = CustomLabel(profit_frame, text=profits[0] + ": $")
-    total_gain = CustomLabel(profit_frame, text=profits[1] + ": $")
-    cash_avail.widget.grid(row=0, column=0, sticky="W", padx=10)
-    total_gain.widget.grid(row=1, column=0, sticky="W", padx=10)
-
-    profit_frame.grid(row=0, column=(max_mid_col - 1),
-                      sticky="NSWE", rowspan=2)
-    btn = TextButton(root, text="Plot", width=100, height=30)
-    btn.set_command(lambda: graph.draw(root))
-    btn.widget.grid(column=0, row=0)
+    graph.draw(top_frame)
     # --------------------------
 # Bottom Frame
-    clicked = tk.StringVar()
-    clicked.set('Type')
-    Order_Type = tk.OptionMenu(bottom_frame, clicked, 'Buy', 'Sell')
-    Order_Type.grid(row=0, column=0)
-
-    Order_Quantity = tk.Entry(bottom_frame)
-    Order_Quantity.insert(0, 'Amount')
+    control_frame = tk.Frame(bottom_frame, bg="lightgray")
+    control_frame.columnconfigure(0, weight=1)
+    control_frame.columnconfigure(1, weight=1)
+    control_frame.columnconfigure(2, weight=1)
+    buy_btn = TextButton(root=control_frame, text="Buy", width=110, height=50)
+    sell_btn = TextButton(root=control_frame,
+                          text="Sell", width=110, height=50)
+    Order_Quantity = tk.Entry(control_frame, fg="lightgray")
+    Order_Quantity.insert(0, '$ Amount')
 
     def delText2(event=None):
         Order_Quantity.delete(0, tk.END)
     Order_Quantity.bind('<Button>', delText2)
-    Order_Quantity.grid(row=0, column=1)
+    buy_btn.widget.grid(column=2, row=0, padx=8)
+    sell_btn.widget.grid(column=1, row=0, padx=8)
+    Order_Quantity.grid(column=0, row=0, padx=8)
 
+    control_frame.grid(column=1, row=1)
 
 # ##
     root.mainloop()
+
+
+def handle_run(symbol):
+    stock_res = get_stock(symbol)
+    times_data = get_time(stock_res)
+    open_prices_data = get_prices(stock_res)['open']
+
+    xlim = (min(times_data), max(times_data))
+    ylim = (min(open_prices_data), max(open_prices_data))
+
+    graph.set_data(x=times_data, y=open_prices_data)
+    graph.draw(root=top_frame, xlim=xlim, ylim=ylim)
+
+
+def handle_reset():
+    pass
+
+
+def handle_buy():
+    pass
+
+
+def handle_sell():
+    pass
 
 
 if __name__ == '__main__':

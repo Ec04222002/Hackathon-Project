@@ -1,46 +1,41 @@
 import requests
+from datetime import datetime
 
-url = "https://alpha-vantage.p.rapidapi.com/query"
 
-
-def get_stock(symbol, interval="1min"):
+def get_stock(symbol, interval="5min", range="1mo"):
 
     symbol = symbol.replace(" ", "").upper()
     interval = interval.replace(" ", "")
 
-    print(symbol, interval)
-    querystring = {"interval": interval, "function": "TIME_SERIES_INTRADAY",
-                   "symbol": symbol, "datatype": "json", "output_size": "compact"}
+    url = "https://yh-finance.p.rapidapi.com/stock/v3/get-chart"
+
+    querystring = {"interval": interval, "symbol": symbol, "range": range, "region": "US", "includePrePost": "false",
+                   "useYfid": "true", "includeAdjustedClose": "true", "events": "capitalGain,div,split"}
 
     headers = {
         "X-RapidAPI-Key": "0a9bd9ad36msh9da804e09688e05p1fcfcejsne6c5cc60e965",
-        "X-RapidAPI-Host": "alpha-vantage.p.rapidapi.com"
+        "X-RapidAPI-Host": "yh-finance.p.rapidapi.com"
     }
 
     response = requests.request(
         "GET", url, headers=headers, params=querystring)
 
-    # print(response.json()['Meta Data'])
-    return response.json()
+    return response.json()['chart']['result'][0]
 
 
 def fix_key(price_type_key): return ''.join(
     price_type_key.split(" ")[1:])
 
 
-def get_time_price(res, interval="1min"):
-    time_series = res['Time Series ' + '(' + interval + ')']
-    times = list(time_series.keys())
-    prices = list(time_series.values())
+def get_time(res):
+    timestamp = res['timestamp']
+    datetimes = [datetime.fromtimestamp(time) for time in timestamp]
 
-    formatted_prices = []
-    for price in prices:
-        formatted_price = {}
-        for old_key in price.keys():
-            formatted_price[fix_key(old_key)] = price[old_key]
+    return datetimes
 
-        formatted_prices.append(formatted_price)
-    return reversed(times), reversed(formatted_prices)
+
+def get_prices(res):
+    return res['indicators']['quote'][0]
 
 
 # res = get_stock("msft")
