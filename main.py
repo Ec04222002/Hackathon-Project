@@ -154,7 +154,8 @@ def main():
     Order_Quantity.bind('<Button>', delText2)
     Order_Quantity.grid(row=0, column=1)
     
-
+    Enter = tk.Button(bottom_frame, text='Enter')
+    Enter.grid(row=0, column = 2)
 # ##
     root.mainloop()
 
