@@ -67,7 +67,7 @@ def main():
     win_frame.rowconfigure(1, weight=1)
     win_frame.rowconfigure(2, weight=2)
 
-    top_frame = tk.Frame(win_frame)
+    top_frame = tk.Frame(win_frame, bg="green")
     mid_frame = tk.Frame(win_frame)
     bottom_frame = tk.Frame(win_frame, bg="lightgray")
 
@@ -80,12 +80,14 @@ def main():
     for j in range(max_mid_col):
         mid_frame.columnconfigure(j, weight=col_weight)
 
-    ##
-
-    ##
     stock_name = "MSFT"
     # stock_res = get_stock(stock_name)
     # times_data, prices_data = get_time_price(stock_res)
+
+    # creating graphs and start top frame
+
+    # creating specs middle frame
+
     specs = ["Open", "Close", "High", "Low", "Volume", "Market Cap", "52 Week High",
              "52 Week Low", "Dividend Yield", "P/E Ratio", "P/B Ratio", "PEG Ratio"]
 
@@ -106,6 +108,8 @@ def main():
 
     profit_frame.grid(row=0, column=(max_mid_col - 1),
                       sticky="NSWE", rowspan=2)
+
+    # --------------------------
 
 
 # ##

@@ -6,10 +6,6 @@ import datetime as dt
 import matplotlib.dates as mdates
 
 
-# def print_hi(i):
-#     print(i)
-
-
 class TickerGraph:
 
     def __init__(self, x_axis_name, y_axis_name, x_time_data, y_open_price_data):
