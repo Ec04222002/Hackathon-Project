@@ -40,8 +40,7 @@ def get_time_price(res, interval="1min"):
             formatted_price[fix_key(old_key)] = price[old_key]
 
         formatted_prices.append(formatted_price)
-
-    return times, formatted_prices
+    return reversed(times), reversed(formatted_prices)
 
 
 # res = get_stock("msft")

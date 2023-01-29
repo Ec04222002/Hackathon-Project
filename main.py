@@ -2,7 +2,7 @@ import tkinter as tk
 from widgets.text_button import TextButton
 from widgets.icon_button import IconButton
 from widgets.custom_label import CustomLabel
-
+from widgets.ticker_graph import TickerGraph
 from constants.window_theme import *
 
 from services.stock import *
@@ -52,6 +52,10 @@ def add_to_mid_frame(widget):
     return
 
 
+def draw_plot():
+    pass
+
+
 def main():
     root = tk.Tk(className=" " + win_name)
 
@@ -67,7 +71,7 @@ def main():
     win_frame.rowconfigure(1, weight=1)
     win_frame.rowconfigure(2, weight=2)
 
-    top_frame = tk.Frame(win_frame, bg="green")
+    top_frame = tk.Frame(win_frame)
     mid_frame = tk.Frame(win_frame)
     bottom_frame = tk.Frame(win_frame, bg="lightgray")
 
@@ -80,12 +84,21 @@ def main():
     for j in range(max_mid_col):
         mid_frame.columnconfigure(j, weight=col_weight)
 
-    stock_name = "MSFT"
-    # stock_res = get_stock(stock_name)
-    # times_data, prices_data = get_time_price(stock_res)
-
+    stock_name = "AMZN"
+    stock_res = get_stock(stock_name)
+    times_data, prices_data = get_time_price(stock_res)
+    open_prices_data = [price['open'] for price in prices_data]
+    print(open_prices_data)
+    # print(open_prices_data)
     # creating graphs and start top frame
+    graph = TickerGraph(x_axis_name="Time (HH:MM)", y_axis_name="Open Price ($)",
+                        x_time_data=times_data, y_open_price_data=open_prices_data)
+    #
+    graph.make_graph()
 
+    ticker = tk.Entry(top_frame)
+    ticker.insert(0, "Hello")
+    ticker.grid(row=0, column=0)
     # creating specs middle frame
 
     specs = ["Open", "Close", "High", "Low", "Volume", "Market Cap", "52 Week High",
@@ -109,6 +122,10 @@ def main():
     profit_frame.grid(row=0, column=(max_mid_col - 1),
                       sticky="NSWE", rowspan=2)
 
+    btn = TextButton(root, text="Plot", width=100, height=30)
+
+    btn.set_command(graph.animate)
+    btn.widget.pack()
     # --------------------------
 
 

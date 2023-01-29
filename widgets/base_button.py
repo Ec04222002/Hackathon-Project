@@ -16,6 +16,3 @@ class BaseButton:
         self.padx = button_padding_x
         self.pady = button_padding_y
         self.font = button_font
-
-    def set_command(self, command):
-        self.command = command

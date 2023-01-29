@@ -26,3 +26,7 @@ class TextButton(BaseButton):
                              command=self.command)
 
         return self.widget
+
+    def set_command(self, command):
+        self.command = command
+        self.update()
