@@ -85,6 +85,31 @@ def main():
     # times_data, prices_data = get_time_price(stock_res)
 
     # creating graphs and start top frame
+  
+    ticker = tk.Entry(top_frame)
+    ticker.insert(0, 'Ticker')
+    ticker.grid(row=0,column = 1)
+
+    money = tk.Label(top_frame, text = '$')
+    money.grid(row=1, column=0)
+
+    budget = tk.Entry(top_frame)
+    budget.insert(0, 'Budget Amount')
+    budget.grid(row=1,column=1)
+
+    training = tk.Label(top_frame, text = 'Choose training duration:')
+    training.grid(row=2, column = 1)
+
+    time = tk.IntVar()
+    Option1 = tk.Radiobutton(top_frame, text = '5 min', variable = time, value = 5)
+    Option1.grid(row=3, column = 1)
+    Option2 = tk.Radiobutton(top_frame, text = '10 min', variable = time, value = 10)
+    Option2.grid(row=4, column = 1)
+    Option3 = tk.Radiobutton(top_frame, text = '15 min', variable = time, value = 15)
+    Option3.grid(row=5, column = 1)
+
+    Start = tk.Button(top_frame, text = 'START')
+    Start.grid(row=6, column = 1)
 
     # creating specs middle frame
 
@@ -110,7 +135,10 @@ def main():
                       sticky="NSWE", rowspan=2)
 
     # --------------------------
-
+#Bottom Frame
+    clicked = tk.StringVar()
+    Order_Type = tk.OptionMenu(bottom_frame, clicked, 'Buy', 'Sell')
+    Order_Type.grid(row=0, column=0)
 
 # ##
     root.mainloop()
