@@ -95,6 +95,7 @@ def main():
 
     def delText0(event=None):
         ticker.delete(0, tk.END)
+        ticker.configure({"fg": "black"})
     ticker.bind('<Button>', delText0)
     ticker.grid(row=0, column=1, rowspan=3, sticky="W", padx=7)
 
@@ -103,6 +104,7 @@ def main():
 
     def delText1(event=None):
         budget.delete(0, tk.END)
+        budget.configure({"fg": "black"})
     budget.bind('<Button>', delText1)
     budget.grid(row=1, column=1, rowspan=2, sticky="W", padx=7)
 
@@ -165,12 +167,16 @@ def main():
     buy_btn = TextButton(root=control_frame, text="Buy", width=110, height=50)
     sell_btn = TextButton(root=control_frame,
                           text="Sell", width=110, height=50)
+    # order_quantity_color = tk.StringVar(control_frame, "$ Amount")
+
     Order_Quantity = tk.Entry(control_frame, fg="lightgray")
     Order_Quantity.insert(0, '$ Amount')
 
     def delText2(event=None):
-        Order_Quantity.delete(0, tk.END)
-    Order_Quantity.bind('<Button>', delText2)
+        Order_Quantity.delete(0, tk.END, )
+        Order_Quantity.configure({"fg": "black"})
+
+    Order_Quantity.bind('<FocusIn>', delText2, )
     buy_btn.widget.grid(column=2, row=0, padx=8)
     sell_btn.widget.grid(column=1, row=0, padx=8)
     Order_Quantity.grid(column=0, row=0, padx=8)
